@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<head>
+<title>My page</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js"></script>
+<!--<script src="js/cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>-->
+
+</head>
+<body>
+<form id="myform">
+	<div>
+	<h3>--------------DPT--------------ROLL NUMBER------------</h3>
+	<select id="myselect">
+		<option value="">---SELECT DEPARTMENT---</option>
+		<option value="CSE">CSE</option>
+		<option value="EEE">EEE</option>
+		<option value="ECE">ECE</option>	
+		<option value="MEC">MEC</option>
+		<option value="SOFT">SOFT</option>
+	</select> 
+	<input type="text" placeholder="Enter Roll Number" id="myroll" name="myroll">
+	</div>
+
+</div>
+
+	<div>
+		<h3>--------------NAME-------------- NUMBER------------</h3>
+		<input type="text" placeholder="Enter Your name" id="myname" name="myname">
+		<input type="text" placeholder="Enter your email" id ="email" name= "email">
+		
+	</div>
+
+	<div>
+		<h3>--------------SUB1--------------MARK1------------</h3>
+		<input type="text" placeholder="Enter subject" id ="sub1" name= "sub1">
+		<input type="text" placeholder="Enter marks" id="mark1" name="mark1">
+	</div>
+
+	<div>
+		<h3>--------------SUB2--------------MARK2------------</h3>
+		<input type="text" placeholder="enter subject" id ="sub2" name= "sub2">
+		<input type="text" placeholder="enter marks" id="mark2" name="mark2">
+	</div>
+
+	<div>
+		<h3>--------------SUB3--------------MARK3------------</h3>
+		<input type="text" placeholder="Enter subject" id ="sub3" name= "sub3">
+		<input type="text" placeholder="Enter marks" id="mark3" name="mark3">
+	</div>
+
+	<div> 
+		<h3>----------------------REMARKS--------------------</h3>
+		<input type="text" placeholder="remarks" id ="remarks">
+	</div>
+	<button type="submit" onclick="subbut();">Submit</button>
+</form>
+
+	<div>
+		<input type="text" placeholder="ENTER STUDENT REGSITRATION NO" id="studreg">
+		<button onclick="fetch();">Fetch</button>
+	</div>
+
+
+</body>
+
+<script>
+
+function subbut() {
+	var name = document.getElementById('myname').value;
+	var email = document.getElementById('email').value;
+	var dpt = document.getElementById('myselect').value;
+	var roll = document.getElementById('myroll').value;
+	var s1 = document.getElementById('sub1').value;
+	var m1 = document.getElementById('mark1').value;
+	var s2 = document.getElementById('sub2').value;
+	var m2 = document.getElementById('mark2').value;
+	var s3 = document.getElementById('sub3').value;
+	var m3 = document.getElementById('mark3').value;
+	var remark = document.getElementById('remarks').value;
+
+	if(name!='' && email!='' && dpt!='' && roll!=''){
+	
+		$.ajax({
+			url: 'myfile.php',
+			method: 'POST',
+			cache: false,
+			dataType:'text',
+			data: {id:name,
+				id2:email,
+				id3:dpt,
+				id4:roll,
+				id5:s1,
+				id6:m1,
+				id7:s2,
+				id8:m2,
+				id9:s3,
+				id10:m3,
+				id11:remark},
+
+			success:function(responseText){
+		    	alert('DATA UPLOADED SUCCESSFULLY!');
+		    },
+		    error: function (xhr, ajaxOptions, thrownError) {
+		            alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+		            alert("responseText: "+xhr.responseText);
+		            alert('Data Upload Failed');
+		        
+		    }
+		});
+	}else {
+		 alert("Please enter your details");
+	}
+}
+
+
+
+function fetch() {
+
+	var reg = document.getElementById("studreg").value;
+
+	$.ajax({
+		url:"fetch.php",
+		method: 'POST',
+		data : {id:reg},
+		dataType :"json",
+		cache: false,
+		success:function(data){
+			document.getElementById('myname').value= data.name;
+			document.getElementById('email').value= data.email;
+			document.getElementById('myselect').value= data.depart;
+			document.getElementById('myroll').value= data.roll;
+			document.getElementById('sub1').value= data.sub1;
+			document.getElementById('mark1').value= data.submark1;
+			document.getElementById('sub2').value= data.sub2;
+			document.getElementById('mark2').value= data.submark2;
+			document.getElementById('sub3').value= data.sub3;
+			document.getElementById('mark3').value= data.submark3;
+			document.getElementById('remarks').value= data.remarks;
+			alert('DATA FETCHED SUCCESSFULLY!');
+        	
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+                alert("readyState: "+xhr.readyState+"\nstatus: "+xhr.status);
+                alert("responseText: "+xhr.responseText);
+                alert('Data Upload Failed');
+            
+        }
+	});
+}
+
+</script>
+</html>
